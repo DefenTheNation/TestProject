@@ -19,23 +19,22 @@ func _ready():
 
 
 func game_over():
+	$Music.stop()
+	$DeathSound.play()
+	
 	$ScoreTimer.stop()
 	$MobTimer.stop()
-
-
-func game_start():
-	score = 0
-	$Player.start($StartPosition.position)
-	$StartTimer.start()
+	$HUD.show_game_over()
 
 
 func _on_ScoreTimer_timeout():
 	score += 1
+	$HUD.update_score(score)
 
 
 func _on_StartTimer_timeout():
 	$MobTimer.start()
-	$ScoreTimer.Start()
+	$ScoreTimer.start()
 
 
 func _on_MobTimer_timeout():
@@ -53,3 +52,14 @@ func _on_MobTimer_timeout():
 	mob.rotation = direction
 	
 	mob.set_linear_velocity(Vector2(rand_range(mob.min_speed, mob.max_speed), 0).rotated(direction))
+
+
+func new_game():
+	score = 0
+	$Player.start($StartPosition.position)
+	$StartTimer.start()
+	
+	$HUD.update_score(score)
+	$HUD.show_message("Get Ready")
+	
+	$Music.play()

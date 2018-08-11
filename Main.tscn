@@ -1,14 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Mob.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=4]
+[ext_resource path="res://art/House In a Forest Loop.ogg" type="AudioStream" id=5]
+[ext_resource path="res://art/gameover.wav" type="AudioStream" id=6]
 
 [sub_resource type="Curve2D" id=1]
 
 bake_interval = 5.0
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, -203.254, -164.419, 0, 0, 0, 0, 237.504, -164.112, 0, 0, 0, 0, 236.89, 164.001, 0, 0, 0, 0, -204.482, 163.387, 0, 0, 0, 0, -203.254, -164.419 )
+"points": PoolVector2Array( 0, 0, 0, 0, -494.067, -290.693, 0, 0, 0, 0, 250.284, -290.832, 0, 0, 0, 0, 251.281, 311.457, 0, 0, 0, 0, -502.52, 312.814, 0, 0, 0, 0, -499.568, -290.832, 0, 0, 0, 0, -494.067, -290.693 )
 }
 
 [node name="Main" type="Node"]
@@ -46,7 +49,10 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="MobPath" type="Path2D" parent="." index="5"]
 
+editor/display_folded = true
 self_modulate = Color( 0.5, 0.6, 1, 0.7 )
+position = Vector2( 686.221, 286.231 )
+scale = Vector2( 1.36434, 1.00285 )
 curve = SubResource( 1 )
 
 [node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath" index="0"]
@@ -61,6 +67,26 @@ cubic_interp = true
 loop = true
 lookahead = 4.0
 
+[node name="HUD" parent="." index="6" instance=ExtResource( 4 )]
+
+[node name="Music" type="AudioStreamPlayer" parent="." index="7"]
+
+stream = ExtResource( 5 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="." index="8"]
+
+stream = ExtResource( 6 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
 [connection signal="hit" from="Player" to="." method="game_over"]
 
 [connection signal="timeout" from="MobTimer" to="." method="_on_MobTimer_timeout"]
@@ -68,5 +94,7 @@ lookahead = 4.0
 [connection signal="timeout" from="ScoreTimer" to="." method="_on_ScoreTimer_timeout"]
 
 [connection signal="timeout" from="StartTimer" to="." method="_on_StartTimer_timeout"]
+
+[connection signal="start_game" from="HUD" to="." method="new_game"]
 
 
